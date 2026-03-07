@@ -12,7 +12,6 @@ FetchContent_Declare(
   GIT_TAG main
   GIT_REPOSITORY https://github.com/CLIUtils/CLI11.git)
 FetchContent_MakeAvailable(CLI11)
-# target_compile_features(alienfx_cli PUBLIC cxx_std_23)
 
 file(GLOB_RECURSE CLI_SOURCES CONFIGURE_DEPENDS src/*.cpp)
 add_executable(alienfx_cli ${CLI_SOURCES})
