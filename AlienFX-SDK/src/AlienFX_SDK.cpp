@@ -1,8 +1,5 @@
 #include "AlienFX_SDK.h"
 
-#include <hidapi.h>
-#include <hidapi_libusb.h>
-#include <libusb.h>
 #include <unistd.h>
 
 #include <cstdint>
@@ -13,6 +10,9 @@
 #include <nlohmann/json.hpp>
 
 #include "alienfx_control.h"
+#include "hidapi.h"
+#include "hidapi_libusb.h"
+#include "libusb.h"
 #include "libusb_helper.h"
 #define LOWORD(l) ((uint16_t)((l) & 0xFFFF))
 #define HIWORD(l) ((uint16_t)(((l) >> 16) & 0xFFFF))
