@@ -7,13 +7,13 @@
 #include <filesystem>
 #include <fstream>
 #include <loguru.hpp>
-#include <nlohmann/json.hpp>
 
 #include "alienfx_control.h"
 #include "hidapi.h"
 #include "hidapi_libusb.h"
 #include "libusb.h"
 #include "libusb_helper.h"
+#include "nlohmann/json.hpp"
 #define LOWORD(l) ((uint16_t)((l) & 0xFFFF))
 #define HIWORD(l) ((uint16_t)(((l) >> 16) & 0xFFFF))
 
@@ -184,13 +184,20 @@ bool Functions::AlienFXProbeDevice(libusb_context* ctxx, unsigned short vidd,
     // NOTE: all lengths are +1 in windows than linux
     // Reason: ask hid devs?
     int checker = length + 1;
+#ifdef DEBUG
+    LOG_S(INFO) << "Probing device VID: 0x" << std::hex << std::setw(4)
+                << std::setfill('0') << vidd << ", PID: 0x" << std::setw(4)
+                << std::setfill('0') << pidd << ", Version: " << std::dec
+                << version << ", Length: " << std::dec << length;
+#endif
     switch (vidd) {
         case 0x0d62:  // Darfon
             version = API_V5;
             break;
         case 0x187c:  // Alienware
             switch (checker) {
-                case 9:
+                // NOTE: Adjusted offset from 9 -> 11 for linux
+                case 11:
                     version = API_V2;
                     break;
                 case 12:
@@ -1063,7 +1070,6 @@ bool Mappings::AlienFXEnumDevices(void* acc) {
 
     while (cur_dev) {
         dev = new Functions();
-
         if (dev->AlienFXProbeDevice(ctx, cur_dev->vendor_id,
                                     cur_dev->product_id, cur_dev->path)) {
 #ifdef DEBUG

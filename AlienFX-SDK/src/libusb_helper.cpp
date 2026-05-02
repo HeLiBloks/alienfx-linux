@@ -1,9 +1,9 @@
 #include <hidapi.h>
 
 #include <cstdint>
-#include <loguru.hpp>
 
 #include "libusb.h"
+#include "loguru.hpp"
 
 int GetMaxPacketSize(libusb_context* ctx, unsigned short vid,
                      unsigned short pid) {
