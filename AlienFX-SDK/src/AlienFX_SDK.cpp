@@ -8,6 +8,7 @@
 #endif
 
 #include <cstdint>
+#include <cstdlib>
 #include <cstring>
 #include <filesystem>
 #include <fstream>
@@ -1040,6 +1041,9 @@ void Mappings::AlienFxUpdateDevice(Functions* dev) {
     if (devInfo) {
         devInfo->version = dev->version;
         devInfo->present = true;
+        if (devInfo->lights.empty() && dev->version == API_V6) {
+            devInfo->lights.push_back({0, {0, 0}, "Monitor"});
+        }
         activeLights += (unsigned)devInfo->lights.size();
         if (devInfo->dev) {
             delete dev;
@@ -1063,6 +1067,9 @@ void Mappings::AlienFxUpdateDevice(Functions* dev) {
     } else {
         fxdevs.push_back(
             {dev->pid, dev->vid, dev, dev->description, dev->version});
+        if (dev->version == API_V6) {
+            fxdevs.back().lights.push_back({0, {0, 0}, "Monitor"});
+        }
         deviceListChanged = fxdevs.back().arrived = fxdevs.back().present =
             true;
         activeDevices++;
@@ -1188,6 +1195,24 @@ Afx_group* Mappings::GetGroupById(unsigned long gID) {
 std::filesystem::path Mappings::GetMappingsPath(const char* username) {
     std::filesystem::path base;
 
+#ifdef _WIN32
+    if (username != nullptr && *username) {
+        base = std::filesystem::path("C:/Users") / username / "AppData" /
+               "Roaming";
+    } else {
+        const char* appData = std::getenv("APPDATA");
+        if (appData && *appData) {
+            base = appData;
+        } else {
+            const char* userProfile = std::getenv("USERPROFILE");
+            if (userProfile && *userProfile)
+                base = std::filesystem::path(userProfile) / "AppData" /
+                       "Roaming";
+            else
+                base = std::filesystem::path(".") / "AppData" / "Roaming";
+        }
+    }
+#else
     if (username != nullptr && *username) {
         base = std::filesystem::path("/home") / username / ".local" / "share";
     } else {
@@ -1204,6 +1229,7 @@ std::filesystem::path Mappings::GetMappingsPath(const char* username) {
                 base = std::filesystem::path(".") / ".local" / "share";
         }
     }
+#endif
 
     base /= "alienfx";
     return base / "mappings.json";
