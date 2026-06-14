@@ -11,6 +11,11 @@ find_package(libusb REQUIRED)
 find_package(loguru REQUIRED)
 find_package(nlohmann_json REQUIRED)
 
+set(ALIENFX_HIDAPI_TARGET hidapi::hidapi)
+if(TARGET hidapi::libusb)
+  set(ALIENFX_HIDAPI_TARGET hidapi::libusb)
+endif()
+
 # ----------- SDK SOURCES ------------
 
 file(GLOB_RECURSE SDK_SOURCES CONFIGURE_DEPENDS src/*.cpp)
@@ -23,6 +28,6 @@ target_include_directories(AlienFX_SDK
 target_link_libraries(
   AlienFX_SDK
   PUBLIC libusb::libusb
-         hidapi::libusb
+         ${ALIENFX_HIDAPI_TARGET}
          loguru::loguru
          nlohmann_json::nlohmann_json)

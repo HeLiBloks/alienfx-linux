@@ -70,10 +70,21 @@ Some notebooks can have 2 devices - APIv4 (for logo, power button, etc) and APIv
 
 ## Build
 
+Linux:
+
 ```bash
 conan profile detect --force
 conan install . --output-folder=build --build=missing -s build_type=Release -s compiler.cppstd=gnu23
 cmake --preset conan-release -DALIENFX_BUILD_CLI=ON -DALIENFX_BUILD_EXAMPLE=ON
+cmake --build --preset conan-release
+```
+
+Windows, from a Visual Studio developer shell:
+
+```bat
+conan profile detect --force
+conan install . --output-folder=build --build=missing -s build_type=Release -s compiler.cppstd=23
+cmake --preset conan-default -DALIENFX_BUILD_CLI=ON -DALIENFX_BUILD_EXAMPLE=ON
 cmake --build --preset conan-release
 ```
 

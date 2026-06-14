@@ -3,7 +3,10 @@
 #include <string>
 #include <vector>
 
+#include "hidapi/hidapi.h"
+#ifndef _WIN32
 #include "hidapi/hidapi_libusb.h"
+#endif
 #include "libusb.h"
 
 using namespace std;

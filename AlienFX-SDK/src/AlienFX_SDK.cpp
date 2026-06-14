@@ -1,6 +1,11 @@
 #include "AlienFX_SDK.h"
 
+#ifdef _WIN32
+#include <chrono>
+#include <thread>
+#else
 #include <unistd.h>
+#endif
 
 #include <cstdint>
 #include <cstring>
@@ -10,15 +15,27 @@
 
 #include "alienfx_control.h"
 #include "hidapi/hidapi.h"
+#ifndef _WIN32
 #include "hidapi/hidapi_libusb.h"
+#endif
 #include "libusb.h"
 #include "libusb_helper.h"
 #include "nlohmann/json.hpp"
+#ifndef LOWORD
 #define LOWORD(l) ((uint16_t)((l) & 0xFFFF))
+#endif
+#ifndef HIWORD
 #define HIWORD(l) ((uint16_t)(((l) >> 16) & 0xFFFF))
+#endif
 
 namespace AlienFX_SDK {
 using json = nlohmann::json;
+
+#ifdef _WIN32
+static void usleep(unsigned int usec) {
+    std::this_thread::sleep_for(std::chrono::microseconds(usec));
+}
+#endif
 
 vector<Afx_icommand>* Functions::SetMaskAndColor(vector<Afx_icommand>* mods,
                                                  Afx_lightblock* act,
