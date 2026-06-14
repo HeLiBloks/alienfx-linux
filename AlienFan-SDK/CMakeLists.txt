@@ -5,6 +5,8 @@ project(
   VERSION 0.0.1)
 add_compile_definitions(VERSION="${PROJECT_VERSION}")
 
+find_package(loguru REQUIRED)
+
 file(GLOB_RECURSE CLI_SOURCES CONFIGURE_DEPENDS src/*.cpp)
 add_library(AlienFan_SDK STATIC ${CLI_SOURCES})
 

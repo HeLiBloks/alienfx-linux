@@ -9,8 +9,8 @@
 #include <loguru.hpp>
 
 #include "alienfx_control.h"
-#include "hidapi.h"
-#include "hidapi_libusb.h"
+#include "hidapi/hidapi.h"
+#include "hidapi/hidapi_libusb.h"
 #include "libusb.h"
 #include "libusb_helper.h"
 #include "nlohmann/json.hpp"

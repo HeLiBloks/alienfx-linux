@@ -66,14 +66,15 @@ Some notebooks can have 2 devices - APIv4 (for logo, power button, etc) and APIv
 
 - cmake
 - ninja
+- conan 2
 
 ## Build
 
 ```bash
-mkdir build/
-cd build/
-cmake .. -G Ninja -DALIENFX_BUILD_CLI=ON -DALIENFX_BUILD_EXAMPLE=ON
-ninja
+conan profile detect --force
+conan install . --output-folder=build --build=missing -s build_type=Release -s compiler.cppstd=gnu23
+cmake --preset conan-release -DALIENFX_BUILD_CLI=ON -DALIENFX_BUILD_EXAMPLE=ON
+cmake --build --preset conan-release
 ```
 
 It would build 3 executables:

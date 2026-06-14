@@ -5,13 +5,7 @@ project(
   VERSION 1.1.0)
 add_compile_definitions(VERSION="${PROJECT_VERSION}")
 
-include(FetchContent)
-
-FetchContent_Declare(
-  CLI11
-  GIT_TAG main
-  GIT_REPOSITORY https://github.com/CLIUtils/CLI11.git)
-FetchContent_MakeAvailable(CLI11)
+find_package(CLI11 REQUIRED)
 
 file(GLOB_RECURSE CLI_SOURCES CONFIGURE_DEPENDS src/*.cpp)
 add_executable(alienfx_cli ${CLI_SOURCES})
